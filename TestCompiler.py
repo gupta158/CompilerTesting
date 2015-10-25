@@ -84,9 +84,9 @@ def compareTinyOutput(input_files):
 # Gets all the files that are going to be tested
 def getFileNames():
     input_files = []
-    inputArg =  sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "all" else None
+    inputArg = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "all" else None
     if inputArg is None:
-        input_files = [f for f in os.listdir(TESTCASESPATH) if os.path.isfile(os.path.join(TESTCASESPATH,f)) and ".micro" in f]
+        input_files = [f for f in os.listdir(TESTCASESPATH) if os.path.isfile(os.path.join(TESTCASESPATH, f)) and ".micro" in f]
     else:
         input_files.append(inputArg)
 
