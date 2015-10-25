@@ -13,7 +13,7 @@ class TestLogger():
         already_existed = os.path.isfile(log_path + '/' + log_name)
 
         with open(log_name, 'a') as csvfile:
-            fieldnames = ['timestamp', 'commit_id', 'result', 'cycles', 'instructions', 'registers_used']
+            fieldnames = ['timestamp', 'commit_id', 'result', 'cycles', 'instructions', 'registers_used', 'error_info']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if not already_existed:
                 writer.writeheader()
