@@ -73,8 +73,6 @@ def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
 
 def compareTinyOutput(input_files):
     for fileName in input_files:
-        actualOutputFile = open(os.path.join(ACTUALTINYOUTPUT, fileName.replace(".micro", ".out")))
-        goldOutputFile = open(os.path.join(GOLDTINYOUTPUT, fileName.replace(".micro", ".out")))
         actualOutput = getTinyOutput(fileName).split("STATISTICS _____")[0]
         goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTICS _____")[0]
         if actualOutput == goldOutput:
