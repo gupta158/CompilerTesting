@@ -1,6 +1,7 @@
 import datetime
 import subprocess
 
+
 class ResultParser():
     def __init__(self):
         self.logs = {}  # dictionary of dictionaries {input file: {'commit id':commit_id,'result',result ...}}
@@ -26,7 +27,7 @@ class ResultParser():
 
         def parse_error_info(input_file):
             pass
-            # stdout should be redirected somewhere that this method will parse for info
+            # stderr should be redirected somewhere that this method will parse for info
             # return error_info
 
         commit_id = get_commit()
