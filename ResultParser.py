@@ -1,6 +1,6 @@
 import datetime
 import subprocess
-
+# test
 
 class ResultParser():
     def __init__(self):
@@ -13,19 +13,19 @@ class ResultParser():
         def get_timestamp():
             return datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
 
-        def get_result(input_file):
+        def get_result(tiny_output):
             pass
             # return result
 
-        def get_cycles(input_file):
+        def get_cycles(tiny_output):
             pass
             # return cycles
 
-        def get_instructions(input_file):
+        def get_instructions(tiny_output):
             pass
             # return instructions
 
-        def get_reg_used(input_file):
+        def get_reg_used(tiny_output):
             pass
             # return reg_used
 
@@ -41,6 +41,8 @@ class ResultParser():
             tmp = {}
             tmp['timestamp'] = timestamp
             tmp['commit_id'] = commit_id
+            tiny_output = getTinyOutput(f)
+
             tmp['result'] = get_result(f)
             tmp['cycles'] = get_cycles(f)
             tmp['instructions'] = get_instructions(f)
