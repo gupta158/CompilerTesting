@@ -168,7 +168,12 @@ def main():
 
     pp(result_parser.logs)
     # logging
-    # loggers = [TestLogger(name=f) for f in input_files]
+    loggers = []
+
+    for f in input_files:
+        logger = TestLogger(file_name=f)
+        logger.add_entry_to_log(result_parser.logs[f])
+        loggers.append()
 
 if __name__ == '__main__':
     main()
