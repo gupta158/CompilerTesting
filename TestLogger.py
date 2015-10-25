@@ -18,3 +18,10 @@ class TestLogger():
             if not already_existed:
                 writer.writeheader()
             writer.writerow(entry_dict)
+
+    def get_previous_entry(self):
+        pass
+
+    def calculate_difference(self, other_entry):
+        # calculates how cycles, instr, registers have changed since last test
+        pass
