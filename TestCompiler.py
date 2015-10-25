@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-TESTCASESPATH = "../testcases/step5/input"
+TESTCASESPATH = "../testcases/step4/input"
 
 GOLDCOMPILERPATH = "../goldCompilers/step5/"
 TINYPATH = "../tiny"
@@ -38,7 +38,7 @@ def runGoldCompilerAndTiny(input_files):
         outFile.close()
 
         # Run tiny on the gold compiled output
-        runProc = subprocess.Popen([TINYPATH, goldCompiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))))
+        runProc = subprocess.Popen([TINYPATH, goldCompiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
         output, error = runProc.communicate()
         goldTinyOutput = os.path.join(GOLDTINYOUTPUT, fileName.replace(".micro", ".out"))
         outFile = open(goldTinyOutput, "w")
@@ -59,7 +59,7 @@ def runActualCompilerAndTiny(input_files):
         outFile.close()
 
         # Run tiny on our compiled output
-        runProc = subprocess.Popen([TINYPATH, compiledOutput, '<', os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))))
+        runProc = subprocess.Popen([TINYPATH, compiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
         output, error = runProc.communicate()
         tinyOutput = os.path.join(ACTUALTINYOUTPUT, fileName.replace(".micro", ".out"))
         outFile = open(tinyOutput, "w")
