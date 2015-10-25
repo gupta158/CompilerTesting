@@ -4,7 +4,7 @@ import subprocess
 from ResultParser import ResultParser
 from pprint import pprint as pp
 
-TESTCASESPATH = "../testcases/step4/input"
+TESTCASESPATH = "../testcases/step5/input"
 
 GOLDCOMPILERPATH = "../goldCompilers/step5/"
 TINYPATH = "../tiny"
@@ -20,6 +20,14 @@ TINYOUTPUT = BASEOUTPUTDIR + "tinyOutput/"
 GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
 ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
 
+class colors:
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    WARNING = '\033[93m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def setupDirectoryStructure():
     directoryNames = [BASELOGDIR, BASEOUTPUTDIR, COMPILEROUTPUT, GOLDCOMPILEROUTPUT, ACTUALCOMPILEROUTPUT, TINYOUTPUT, GOLDTINYOUTPUT, ACTUALTINYOUTPUT]
@@ -30,20 +38,33 @@ def setupDirectoryStructure():
 
 def runCompiler(input_file, gold=False):
     if gold:
-        args = ['java', '-cp', GOLDCOMPILERPATH + 'antlr/:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, fileName)]
+        args = ['java', '-cp', GOLDCOMPILERPATH + 'antlr/:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
-        args = ['../Micro',  os.path.join(TESTCASESPATH, fileName)]
+        args = ['../Micro',  os.path.join(TESTCASESPATH, input_file)]
         compiler_output = ACTUALCOMPILEROUTPUT
 
-    runProc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = runProc.communicate()
-    compiled_output = os.path.join(compiler_output, fileName.replace(".micro", ".tiny"))
-    open(compiled_output, 'w').write(output)
+    compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
+    runProc = subprocess.Popen(args, stdout=open(compiled_output, 'w'), stderr=subprocess.PIPE)
+    error = runProc.communicate()
 
 
 def runTiny(input_file, gold=False):
-    pass
+    if gold:
+        compiler_output = os.path.join(GOLDCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
+        tiny_output = open(os.path.join(GOLDTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
+    else:
+        compiler_output = os.path.join(ACTUALCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
+        tiny_output = open(os.path.join(ACTUALTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
+
+    args = [TINYPATH, compiler_output]
+    if os.path.exists(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input"))):
+        input_file = open(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input")))
+    else:
+        input_file = None
+    
+    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file)
+    error = runProc.communicate()
 
 
 # Runs the compiler against the input_files
@@ -58,14 +79,15 @@ def runGoldCompilerAndTiny(input_files):
         # outFile.close()
 
         runCompiler(fileName, gold=True)
+        runTiny(fileName, gold=True)
 
         # Run tiny on the gold compiled output
-        runProc = subprocess.Popen([TINYPATH, goldCompiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
-        output, error = runProc.communicate()
-        goldTinyOutput = os.path.join(GOLDTINYOUTPUT, fileName.replace(".micro", ".out"))
-        outFile = open(goldTinyOutput, "w")
-        outFile.write(output)
-        outFile.close()
+        # runProc = subprocess.Popen([TINYPATH, goldCompiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
+        # output, error = runProc.communicate()
+        # goldTinyOutput = os.path.join(GOLDTINYOUTPUT, fileName.replace(".micro", ".out"))
+        # outFile = open(goldTinyOutput, "w")
+        # outFile.write(output)
+        # outFile.close()
     return
 
 
@@ -81,14 +103,15 @@ def runActualCompilerAndTiny(input_files):
         # outFile.close()
 
         runCompiler(fileName)
+        runTiny(fileName)
 
         # Run tiny on our compiled output
-        runProc = subprocess.Popen([TINYPATH, compiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
-        output, error = runProc.communicate()
-        tinyOutput = os.path.join(ACTUALTINYOUTPUT, fileName.replace(".micro", ".out"))
-        outFile = open(tinyOutput, "w")
-        outFile.write(output)
-        outFile.close()
+        # runProc = subprocess.Popen([TINYPATH, compiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
+        # output, error = runProc.communicate()
+        # tinyOutput = os.path.join(ACTUALTINYOUTPUT, fileName.replace(".micro", ".out"))
+        # outFile = open(tinyOutput, "w")
+        # outFile.write(output)
+        # outFile.close()
 
 
 def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
@@ -100,9 +123,9 @@ def compareTinyOutput(input_files):
         actualOutput = getTinyOutput(fileName)[0]
         goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT)[0]
         if actualOutput == goldOutput:
-            print(fileName + " PASSED")
+            print("{0}{1:<30}PASSED{2}".format(colors.GREEN, fileName, colors.ENDC))
         else:
-            print(fileName + " FAILED")
+            print("{0}{1:<30}FAILED{2}".format(colors.RED, fileName, colors.ENDC))
             # print("ACTUALOUTPUT: " + actualOutput)
             # print("GOLDOUTPUT: " + goldOutput)
 
