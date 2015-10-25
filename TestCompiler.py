@@ -67,12 +67,16 @@ def runActualCompilerAndTiny(input_files):
         outFile.close()
 
 
+def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
+    return open(os.path.join(path, input_file.replace(".micro", ".out"))).read()
+
+
 def compareTinyOutput(input_files):
     for fileName in input_files:
         actualOutputFile = open(os.path.join(ACTUALTINYOUTPUT, fileName.replace(".micro", ".out")))
         goldOutputFile = open(os.path.join(GOLDTINYOUTPUT, fileName.replace(".micro", ".out")))
-        actualOutput = actualOutputFile.read().split("STATISTICS _____")[0]
-        goldOutput = goldOutputFile.read().split("STATISTICS _____")[0]
+        actualOutput = getTinyOutput(fileName).split("STATISTICS _____")[0]
+        goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTICS _____")[0]
         if actualOutput == goldOutput:
             print(fileName + " PASSED")
         else:
