@@ -1,15 +1,17 @@
+import datetime
+import subprocess
+
+
 class ResultParser():
     def __init__(self):
         self.logs = {}  # dictionary of dictionaries {input file: {'commit id':commit_id,'result',result ...}}
 
     def parse_results(self, input_files):
         def get_commit_id():
-            pass
-            # return commit
+            return subprocess.getoutput("git log | head -n1 | cut -d' ' -f2")
 
         def get_timestamp():
-            pass
-            # return timestamp
+            return datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
 
         def get_result(input_file):
             pass
