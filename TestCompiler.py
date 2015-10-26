@@ -30,17 +30,17 @@ def setupDirectoryStructure():
 
 def runCompiler(input_file, gold=False):
     if gold:
-        args = ['java', '-cp', GOLDCOMPILERPATH + 'antlr/:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, fileName)]
+        args = ['java', '-cp', GOLDCOMPILERPATH + 'antlr/:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
-        args = ['../Micro',  os.path.join(TESTCASESPATH, fileName)]
+        args = ['../Micro',  os.path.join(TESTCASESPATH, input_file)]
         compiler_output = ACTUALCOMPILEROUTPUT
 
     runProc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = runProc.communicate()
-    compiled_output = os.path.join(compiler_output, fileName.replace(".micro", ".tiny"))
-    open(compiled_output, 'w').write(output)
-
+    compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
+    open(compiled_output, 'w').write(str(output))
+    return compiled_output
 
 def runTiny(input_file, gold=False):
     pass
@@ -57,7 +57,7 @@ def runGoldCompilerAndTiny(input_files):
         # outFile.write(output)
         # outFile.close()
 
-        runCompiler(fileName, gold=True)
+        goldCompiledOutput = runCompiler(fileName, gold=True)
 
         # Run tiny on the gold compiled output
         runProc = subprocess.Popen([TINYPATH, goldCompiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
@@ -80,7 +80,7 @@ def runActualCompilerAndTiny(input_files):
         # outFile.write(output)
         # outFile.close()
 
-        runCompiler(fileName)
+        compiledOutput = runCompiler(fileName)
 
         # Run tiny on our compiled output
         runProc = subprocess.Popen([TINYPATH, compiledOutput], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=open(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) if os.path.exists(os.path.join(TESTCASESPATH, fileName.replace(".micro", ".input"))) else None )
