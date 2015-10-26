@@ -13,7 +13,7 @@ class TestLogger():
 
         already_existed = os.path.isfile(os.path.join(BASELOGDIR, log_name))
 
-        with open(log_name, 'a') as csvfile:
+        with open(os.path.join(BASELOGDIR, log_name), 'a') as csvfile:
             fieldnames = ['timestamp', 'commit_id', 'result', 'cycles', 'instructions', 'registers_used', 'memory_used', 'error_info']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if not already_existed:
