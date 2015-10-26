@@ -6,14 +6,14 @@ from TestLogger import TestLogger
 from pprint import pprint as pp
 from Graphing import *
 
-TESTCASESPATH = "./testcases/step4/input"
+TESTCASESPATH = "CompilerTesting/testcases/step4/input"
 
-GOLDCOMPILERPATH = "goldCompilers/step5/step5.jar"
-ANTLRPATH = "goldCompilers/antlr.jar"
-TINYPATH = "../tiny"
+GOLDCOMPILERPATH = "CompilerTesting/goldCompilers/step5/step5.jar"
+ANTLRPATH = "CompilerTesting/goldCompilers/antlr.jar"
+TINYPATH = "tiny"
 
-BASEOUTPUTDIR = "output/"
-BASELOGDIR = "logs/"
+BASEOUTPUTDIR = "CompilerTesting/output/"
+BASELOGDIR = "CompilerTesting/logs/"
 
 COMPILEROUTPUT = BASEOUTPUTDIR + "compiledOutput/"
 GOLDCOMPILEROUTPUT = COMPILEROUTPUT + "gold/"
@@ -46,7 +46,7 @@ def runCompiler(input_file, gold=False):
         args = ['java', '-cp', ANTLRPATH + ':' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
-        args = ['python3', '../src/Micro.py',  os.path.join(TESTCASESPATH, input_file)]
+        args = ['python3', '../Micro',  os.path.join(TESTCASESPATH, input_file)]
         compiler_output = ACTUALCOMPILEROUTPUT
 
     compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
