@@ -50,7 +50,7 @@ def runCompiler(input_file, gold=False):
 
     compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
     fp = open(compiled_output, 'w')
-    runProc = subprocess.Popen(args, stdout=fp, stderr=subprocess.PIPE)
+    runProc = subprocess.Popen(args, stdout=fp)
     error = runProc.communicate()
 
 
@@ -68,7 +68,7 @@ def runTiny(input_file, gold=False):
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file, shell=False)
+    runProc = subprocess.Popen(args, stdout=tiny_output, stdin=input_file, shell=False)
     error = runProc.communicate()
 
 
