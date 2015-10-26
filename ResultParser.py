@@ -2,6 +2,8 @@ import datetime
 import subprocess
 import os
 import re
+import time
+
 
 class ResultParser():
     def __init__(self):
@@ -15,7 +17,8 @@ class ResultParser():
             return subprocess.getoutput("git --git-dir='../.git/' log | head -n1 | cut -d' ' -f2")
 
         def get_timestamp():
-            return datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
+            return datetime.datetime.now().strftime("%m %d %y %H %M %S")
+            # return time.time()
 
         def get_result(tiny_output):
             return tiny_output[0]
@@ -43,6 +46,10 @@ class ResultParser():
             tmp['commit_id'] = commit_id
 
             tiny_output = self.getTinyOutput(f)
+
+            print('tiny out')
+            print(tiny_output)
+            print('~~~~~~~~')
             mem_used, reg_used = get_reg_mem_used(tiny_output)
 
             tmp['result'] = get_result(tiny_output)
