@@ -1,13 +1,13 @@
 import datetime
 import subprocess
 import os
-
+import re
 
 class ResultParser():
     def __init__(self):
         self.logs = {}  # dictionary of dictionaries {input file: {'commit id':commit_id,'result',result ...}}
 
-    def getTinyOutput(self, input_file, path="tinyOutput/actual/"):
+    def getTinyOutput(self, input_file, path="output/tinyOutput/actual/"):
         return open(os.path.join(path, input_file.replace(".micro", ".out"))).read()
 
     def parse_results(self, input_files):
@@ -27,7 +27,7 @@ class ResultParser():
             return re.findall(r'Instructions:(\d*)', tiny_output)[0]
 
         def get_reg_mem_used(tiny_output):
-            return re.findall(r'Memory Usage \(mem:(\d*),reg:(\d*)\)', tinyoutput)[0]
+            return re.findall(r'Memory Usage \(mem:(\d*),reg:(\d*)\)', tiny_output)[0]
 
         def parse_error_info(input_file):
             pass
@@ -43,7 +43,7 @@ class ResultParser():
             tmp['commit_id'] = commit_id
 
             tiny_output = self.getTinyOutput(f)
-            mem_used, reg_used = get_reg_used(tiny_output)
+            mem_used, reg_used = get_reg_mem_used(tiny_output)
 
             tmp['result'] = get_result(tiny_output)
             tmp['cycles'] = get_cycles(tiny_output)
