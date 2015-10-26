@@ -6,7 +6,7 @@ from pprint import pprint as pp
 
 TESTCASESPATH = "./testcases/step5/input"
 
-GOLDCOMPILERPATH = "../goldCompilers/step5/"
+GOLDCOMPILERPATH = "../goldCompilers/step5/step5.jar"
 TINYPATH = "../tiny"
 
 BASEOUTPUTDIR = "output/"
@@ -40,7 +40,7 @@ def setupDirectoryStructure():
 
 def runCompiler(input_file, gold=False):
     if gold:
-        args = ['java', '-cp', GOLDCOMPILERPATH + 'antlr/:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
+        args = ['java', '-cp', 'lib/antlr-4.5-complete.jar:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
         args = ['../Micro',  os.path.join(TESTCASESPATH, input_file)]
