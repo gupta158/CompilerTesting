@@ -4,7 +4,7 @@ import subprocess
 from ResultParser import ResultParser
 from pprint import pprint as pp
 
-TESTCASESPATH = "../testcases/step5/input"
+TESTCASESPATH = "./testcases/step5/input"
 
 GOLDCOMPILERPATH = "../goldCompilers/step5/"
 TINYPATH = "../tiny"
