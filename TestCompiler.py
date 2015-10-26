@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 from ResultParser import ResultParser
+from TestLogger import TestLogger
 from pprint import pprint as pp
 
 TESTCASESPATH = "./testcases/step5/input"
@@ -177,7 +178,7 @@ def main():
     for f in input_files:
         logger = TestLogger(file_name=f)
         logger.add_entry_to_log(result_parser.logs[f])
-        loggers.append()
+        loggers.append(logger)
 
 if __name__ == '__main__':
     main()

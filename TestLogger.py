@@ -2,6 +2,7 @@ import csv
 import getpass
 import os.path
 
+BASELOGDIR = "logs/"
 
 class TestLogger():
     def __init__(self, file_name):
@@ -10,7 +11,7 @@ class TestLogger():
     def add_entry_to_log(self, entry_dict):
         log_name = getpass.getuser() + '-' + self.file_name + '-log.csv'
 
-        already_existed = os.path.isfile(log_path + '/' + log_name)
+        already_existed = os.path.isfile(os.path.join(BASELOGDIR, log_name))
 
         with open(log_name, 'a') as csvfile:
             fieldnames = ['timestamp', 'commit_id', 'result', 'cycles', 'instructions', 'registers_used', 'memory_used', 'error_info']
