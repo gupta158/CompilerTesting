@@ -20,6 +20,7 @@ TINYOUTPUT = BASEOUTPUTDIR + "tinyOutput/"
 GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
 ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
 
+
 class colors:
     BLUE = '\033[94m'
     GREEN = '\033[92m'
@@ -28,6 +29,7 @@ class colors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
 
 def setupDirectoryStructure():
     directoryNames = [BASELOGDIR, BASEOUTPUTDIR, COMPILEROUTPUT, GOLDCOMPILEROUTPUT, ACTUALCOMPILEROUTPUT, TINYOUTPUT, GOLDTINYOUTPUT, ACTUALTINYOUTPUT]
@@ -62,7 +64,7 @@ def runTiny(input_file, gold=False):
         input_file = open(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input")))
     else:
         input_file = None
-    
+
     runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file)
     error = runProc.communicate()
 
