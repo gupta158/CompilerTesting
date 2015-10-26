@@ -9,7 +9,7 @@ class ResultParser():
     def __init__(self):
         self.logs = {}  # dictionary of dictionaries {input file: {'commit id':commit_id,'result',result ...}}
 
-    def getTinyOutput(self, input_file, path="output/tinyOutput/actual/"):
+    def getTinyOutput(self, input_file, path="CompilerTesting/output/tinyOutput/actual/"):
         return open(os.path.join(path, input_file.replace(".micro", ".out"))).read()
 
     def parse_results(self, input_files):

@@ -46,7 +46,7 @@ def runCompiler(input_file, gold=False):
         args = ['java', '-cp', ANTLRPATH + ':' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
-        args = ['python3', '../Micro',  os.path.join(TESTCASESPATH, input_file)]
+        args = ['bash', 'Micro',  os.path.join(TESTCASESPATH, input_file)]
         compiler_output = ACTUALCOMPILEROUTPUT
 
     compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))

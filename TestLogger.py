@@ -3,7 +3,7 @@ import getpass
 import os.path
 from pprint import pprint as pp
 
-BASELOGDIR = "logs/"
+BASELOGDIR = "CompilerTesting/logs/"
 
 
 class TestLogger():
