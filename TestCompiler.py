@@ -47,7 +47,8 @@ def runCompiler(input_file, gold=False):
         compiler_output = ACTUALCOMPILEROUTPUT
 
     compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
-    runProc = subprocess.Popen(args, stdout=open(compiled_output, 'w'), stderr=subprocess.PIPE)
+    fp = open(compiled_output, 'w')
+    runProc = subprocess.Popen(args, stdout=fp, stderr=subprocess.PIPE)
     error = runProc.communicate()
 
 
@@ -61,11 +62,11 @@ def runTiny(input_file, gold=False):
 
     args = [TINYPATH, compiler_output]
     if os.path.exists(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input"))):
-        input_file = open(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input")))
+        input_file = open(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input")), 'r')
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file)
+    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file, shell=True)
     error = runProc.communicate()
 
 
@@ -117,13 +118,13 @@ def runActualCompilerAndTiny(input_files):
 
 
 def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
-    return open(os.path.join(path, input_file.replace(".micro", ".out"))).readlines()
+    return open(os.path.join(path, input_file.replace(".micro", ".out"))).read()
 
 
 def compareTinyOutput(input_files):
     for fileName in input_files:
-        actualOutput = getTinyOutput(fileName)[0]
-        goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT)[0]
+        actualOutput = getTinyOutput(fileName).split("STATISTIC")
+        goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTIC")
         if actualOutput == goldOutput:
             print("{0}{1:<30}PASSED{2}".format(colors.GREEN, fileName, colors.ENDC))
         else:
