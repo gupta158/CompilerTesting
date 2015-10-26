@@ -12,7 +12,7 @@ class ResultParser():
 
     def parse_results(self, input_files):
         def get_commit_id():
-            return subprocess.getoutput("git log | head -n1 | cut -d' ' -f2")
+            return subprocess.getoutput("git --git-dir='../.git/' log | head -n1 | cut -d' ' -f2")
 
         def get_timestamp():
             return datetime.datetime.now().strftime("%A, %d. %B %Y %I:%M%p")
