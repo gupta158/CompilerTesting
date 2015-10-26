@@ -4,8 +4,9 @@ import subprocess
 from ResultParser import ResultParser
 from TestLogger import TestLogger
 from pprint import pprint as pp
+from Graphing import *
 
-TESTCASESPATH = "./testcases/step5/input"
+TESTCASESPATH = "./testcases/step4/input"
 
 GOLDCOMPILERPATH = "goldCompilers/step5/step5.jar"
 ANTLRPATH = "goldCompilers/antlr.jar"
@@ -45,12 +46,12 @@ def runCompiler(input_file, gold=False):
         args = ['java', '-cp', ANTLRPATH + ':' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
-        args = ['../Micro',  os.path.join(TESTCASESPATH, input_file)]
+        args = ['python3', '../src/Micro.py',  os.path.join(TESTCASESPATH, input_file)]
         compiler_output = ACTUALCOMPILEROUTPUT
 
     compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
     fp = open(compiled_output, 'w')
-    runProc = subprocess.Popen(args, stdout=fp, stderr=subprocess.PIPE)
+    runProc = subprocess.Popen(args, stdout=fp)
     error = runProc.communicate()
 
 
@@ -63,12 +64,13 @@ def runTiny(input_file, gold=False):
         tiny_output = open(os.path.join(ACTUALTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
 
     args = [TINYPATH, compiler_output]
+
     if os.path.exists(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input"))):
         input_file = open(os.path.join(TESTCASESPATH, input_file.replace(".micro", ".input")), 'r')
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file, shell=False)
+    runProc = subprocess.Popen(args, stdout=tiny_output, stdin=input_file, shell=False)
     error = runProc.communicate()
 
 
@@ -174,11 +176,19 @@ def main():
     pp(result_parser.logs)
     # logging
     loggers = []
+    lgs = []
 
     for f in input_files:
         logger = TestLogger(file_name=f)
         logger.add_entry_to_log(result_parser.logs[f])
         loggers.append(logger)
+        logger.get_full_log()
+        lg = LogGrapher(f, 'cycles')
+        lg.add_trace(logger.logs)
+        lg.plot()
+        lgs.append(lg)
+
+
 
 if __name__ == '__main__':
     main()
