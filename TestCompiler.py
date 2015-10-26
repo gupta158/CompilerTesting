@@ -6,7 +6,8 @@ from pprint import pprint as pp
 
 TESTCASESPATH = "./testcases/step5/input"
 
-GOLDCOMPILERPATH = "../goldCompilers/step5/step5.jar"
+GOLDCOMPILERPATH = "goldCompilers/step5/step5.jar"
+ANTLRPATH = "goldCompilers/antlr.jar"
 TINYPATH = "../tiny"
 
 BASEOUTPUTDIR = "output/"
@@ -40,7 +41,7 @@ def setupDirectoryStructure():
 
 def runCompiler(input_file, gold=False):
     if gold:
-        args = ['java', '-cp', 'lib/antlr-4.5-complete.jar:' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
+        args = ['java', '-cp', ANTLRPATH + ':' + GOLDCOMPILERPATH, 'Micro', os.path.join(TESTCASESPATH, input_file)]
         compiler_output = GOLDCOMPILEROUTPUT
     else:
         args = ['../Micro',  os.path.join(TESTCASESPATH, input_file)]
@@ -66,7 +67,7 @@ def runTiny(input_file, gold=False):
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file, shell=True)
+    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file)
     error = runProc.communicate()
 
 
@@ -123,8 +124,8 @@ def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
 
 def compareTinyOutput(input_files):
     for fileName in input_files:
-        actualOutput = getTinyOutput(fileName).split("STATISTIC")
-        goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTIC")
+        actualOutput = getTinyOutput(fileName).split("STATISTIC")[0]
+        goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTIC")[0]
         if actualOutput == goldOutput:
             print("{0}{1:<30}PASSED{2}".format(colors.GREEN, fileName, colors.ENDC))
         else:
