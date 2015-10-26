@@ -67,7 +67,7 @@ def runTiny(input_file, gold=False):
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file)
+    runProc = subprocess.Popen(args, stdout=tiny_output, stderr=subprocess.PIPE, stdin=input_file, shell=False)
     error = runProc.communicate()
 
 
