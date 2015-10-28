@@ -1,8 +1,12 @@
 import sys
 import os
 import subprocess
+import getpass
+import datetime
+
 from ResultParser import ResultParser
 from TestLogger import TestLogger
+from JSONPostResults import JSONPostResults
 from pprint import pprint as pp
 from Graphing import *
 
@@ -10,7 +14,7 @@ TESTCASESPATH = "CompilerTesting/testcases/step4/input"
 
 GOLDCOMPILERPATH = "CompilerTesting/goldCompilers/step5/step5.jar"
 ANTLRPATH = "CompilerTesting/goldCompilers/antlr.jar"
-TINYPATH = "tiny"
+TINYPATH = "./tiny"
 
 BASEOUTPUTDIR = "CompilerTesting/output/"
 BASELOGDIR = "CompilerTesting/logs/"
@@ -126,15 +130,18 @@ def getTinyOutput(input_file, path=ACTUALTINYOUTPUT):
 
 
 def compareTinyOutput(input_files):
+    passedInputFiles = []
     for fileName in input_files:
         actualOutput = getTinyOutput(fileName).split("STATISTIC")[0]
         goldOutput = getTinyOutput(fileName, path=GOLDTINYOUTPUT).split("STATISTIC")[0]
         if actualOutput == goldOutput:
             print("{0}{1:<30}PASSED{2}".format(colors.GREEN, fileName, colors.ENDC))
+            passedInputFiles.append(fileName)
         else:
             print("{0}{1:<30}FAILED{2}".format(colors.RED, fileName, colors.ENDC))
             # print("ACTUALOUTPUT: " + actualOutput)
             # print("GOLDOUTPUT: " + goldOutput)
+    return passedInputFiles
 
 
 # Gets all the files that are going to be tested
@@ -164,30 +171,33 @@ def main():
     runGoldCompilerAndTiny(input_files)
 
     # compare output
-    compareTinyOutput(input_files)
+    passedInputFiles = compareTinyOutput(input_files)
     # inputs to nico / outputs of Manish
     # input_files -- [List of ~~~~~ALL THE FILE NAMES~~~~~~ lol file names or just the one specified]
 
     # parsing
     # output dictionary {input_file_name : TestLogEntry()}
     result_parser = ResultParser()
-    result_parser.parse_results(input_files)
+    result_parser.parse_results(passedInputFiles)
 
     pp(result_parser.logs)
     # logging
     loggers = []
     lgs = []
 
-    for f in input_files:
+    jsonReqDict = JSONPostResults(getpass.getuser(), str(datetime.datetime.now()))
+    for f in passedInputFiles:
         logger = TestLogger(file_name=f)
         logger.add_entry_to_log(result_parser.logs[f])
         loggers.append(logger)
         logger.get_full_log()
-        lg = LogGrapher(f, 'cycles')
-        lg.add_trace(logger.logs)
-        lg.plot()
-        lgs.append(lg)
+        # lg = LogGrapher(f, 'cycles')
+        # lg.add_trace(logger.logs)
+        # lg.plot()
+        # lgs.append(lg)
+        jsonReqDict.addTest(f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
 
+    jsonReqDict.post()
 
 
 if __name__ == '__main__':
