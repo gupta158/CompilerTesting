@@ -17,12 +17,19 @@ This repo contains the client side code of Compiler Tester. Steps to use this:
   3. To run the script, go back to the main project directory (i.e. your compiler directory) the following commands are your options:
     
     a. `python3 CompilerTesting/TestCompiler.py` 
+
           This runs all the test cases for the currentstep
+          
     b. `python3 CompilerTesting/TestCompiler.py --step all` 
+    
           This runs all the test cases for all steps after and including step4
+          
     c. `python3 CompilerTesting/TestCompiler.py --step $NUM` 
+    
           This runs all the test cases for a certain step, either 4 or 5
+          
     d. `python3 CompilerTesting/TestCompiler.py --test test_expr.micro`
+    
           This runs a certain testcase of the current step, to run a test of a different step add the --step
 
   4. The output will tell you whether you passed or failed the testcases, if all passed then the data will be posted to the site. You can look at the output folder to see what was generated.
