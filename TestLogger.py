@@ -2,8 +2,7 @@ import csv
 import getpass
 import os.path
 from pprint import pprint as pp
-
-BASELOGDIR = "CompilerTesting/logs/"
+from Utility import Utility
 
 
 class TestLogger():
@@ -13,9 +12,9 @@ class TestLogger():
         self.logs = []
 
     def add_entry_to_log(self, entry_dict):
-        already_existed = os.path.isfile(os.path.join(BASELOGDIR, self.log_name))
+        already_existed = os.path.isfile(os.path.join(Utility.BASELOGDIR, self.log_name))
 
-        with open(os.path.join(BASELOGDIR, self.log_name), 'a') as csvfile:
+        with open(os.path.join(Utility.BASELOGDIR, self.log_name), 'a') as csvfile:
             fieldnames = ['timestamp', 'commit_id', 'result', 'cycles', 'instructions', 'registers_used', 'memory_used', 'error_info']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if not already_existed:
@@ -30,7 +29,7 @@ class TestLogger():
         pass
 
     def get_full_log(self):
-        with open(os.path.join(BASELOGDIR, self.log_name), 'r') as csvfile:
+        with open(os.path.join(Utility.BASELOGDIR, self.log_name), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for r in reader:
                 self.logs.append(r)

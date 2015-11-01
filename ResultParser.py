@@ -37,16 +37,17 @@ class ResultParser():
             # stderr should be redirected somewhere that this method will parse for info
             # return error_info
 
-        commit_id = get_commit_id()
+        # commit_id = get_commit_id()
         timestamp = get_timestamp()
 
         for f in input_files:
             tmp = {}
             tmp['timestamp'] = timestamp
-            tmp['commit_id'] = commit_id
+            # tmp['commit_id'] = commit_id
 
             tiny_output = self.getTinyOutput(f)
 
+            print(f)
             print('tiny out')
             print(tiny_output)
             print('~~~~~~~~')
