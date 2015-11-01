@@ -4,6 +4,7 @@ import subprocess
 import getpass
 import datetime
 import json
+import re
 
 from ResultParser import ResultParser
 from TestLogger import TestLogger
@@ -11,6 +12,7 @@ from JSONPostResults import JSONPostResults
 from pprint import pprint as pp
 from Graphing import *
 from Utility import *
+import argparse
 
 
 def setupDirectoryStructure():
@@ -93,9 +95,9 @@ def compareTinyOutput(input_files):
 
 
 # Gets all the files that are going to be tested
-def getFileNames():
+def getFileNames(testName):
     input_files = []
-    inputArg = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "all" else None
+    inputArg = testName
     if inputArg is None:
         input_files = [f for f in os.listdir(Utility.TESTCASESPATH) if os.path.isfile(os.path.join(Utility.TESTCASESPATH, f)) and ".micro" in f]
     else:
@@ -103,12 +105,17 @@ def getFileNames():
 
     return input_files
 
+#Update step number for all constant params
+def updateStepNum(stepNum):
+    Utility.TESTCASESPATH = re.sub(r'/testcases/step\d/input', "/testcases/step{0}/input".format(str(stepNum)), Utility.TESTCASESPATH)
+    Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar", "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
 
-def main():
+
+def runTests(stepNum, testName):
+    updateStepNum(stepNum)
     # getConfigData()
-    # return
-    # parse args
-    input_files = getFileNames()
+
+    input_files = getFileNames(testName)
 
     # setup directory structure
     setupDirectoryStructure()
@@ -130,7 +137,7 @@ def main():
     result_parser = ResultParser()
     result_parser.parse_results(passedInputFiles)
 
-    pp(result_parser.logs)
+    # pp(result_parser.logs)
     # logging
     loggers = []
     lgs = []
@@ -143,8 +150,39 @@ def main():
         logger.get_full_log()
         jsonReqDict.addTest(f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
 
-    jsonReqDict.post()
-    print(outputStr)
+    if(len(passedInputFiles) == len(input_files)):
+        jsonReqDict.post()
+        
+    return outputStr
+
+def main():
+
+    parser = argparse.ArgumentParser(description='Run tests for compiler')
+    parser.add_argument('--test', metavar='testName', type=str, nargs='?',
+                       help='The test name to run (eg. test_expr.micro)')
+    parser.add_argument('--step',  metavar='stepNum', type=str, nargs='?',
+                       help='The step to run (default is the step due)')
+
+    args = parser.parse_args()
+    argsDict = vars(args)
+    testName = argsDict['test']
+    stepStr  = argsDict['step']
+    completeOutput = ""
+    steps = []
+
+    if stepStr == "all":
+        steps = Utility.STEPS
+        testName = None
+    elif stepStr in  Utility.STEPS:
+        steps.append(stepStr)
+    else:
+        steps.append(Utility.CURRSTEP)
+
+    for step in steps:
+        completeOutput += runTests(step, testName)
+    
+    print("==============================================")
+    print(completeOutput)
 
 
 if __name__ == '__main__':

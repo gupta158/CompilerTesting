@@ -15,7 +15,7 @@ class Utility:
 
 	SCRIPTPATH = (os.path.dirname(os.path.realpath(__file__)))
 	
-	TESTCASESPATH = SCRIPTPATH + "/testcases/step4/input"
+	TESTCASESPATH = SCRIPTPATH + "/testcases/step5/input"
 	GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"
 	ANTLRPATH = SCRIPTPATH + "/goldCompilers/antlr.jar"
 	TINYPATH = SCRIPTPATH + "/tiny"
@@ -25,12 +25,14 @@ class Utility:
 
 	COMPILEROUTPUT = BASEOUTPUTDIR + "compiledOutput/"
 	TINYOUTPUT = BASEOUTPUTDIR + "tinyOutput/"
-	
+
 	GOLDCOMPILEROUTPUT = COMPILEROUTPUT + "gold/"
 	ACTUALCOMPILEROUTPUT = COMPILEROUTPUT + "actual/"
 
 	GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
 	ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
+	STEPS = ["4", "5"]
+	CURRSTEP = "5"
 
 	def getConfigData():
 	    config_file_obj = open(Utility.CONFIGFILE)
