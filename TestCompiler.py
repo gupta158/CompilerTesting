@@ -10,7 +10,6 @@ from ResultParser import ResultParser
 from TestLogger import TestLogger
 from JSONPostResults import JSONPostResults
 from pprint import pprint as pp
-from Graphing import *
 from Utility import *
 import argparse
 
@@ -83,6 +82,7 @@ def getTinyOutput(input_file, path=Utility.ACTUALTINYOUTPUT):
 def compareTinyOutput(input_files):
     passedInputFiles = []
     outputStr = ""
+    diffDict = {}
     for fileName in input_files:
         actualOutput = getTinyOutput(fileName).split("STATISTIC")[0]
         goldOutput = getTinyOutput(fileName, path=Utility.GOLDTINYOUTPUT).split("STATISTIC")[0]
@@ -91,7 +91,8 @@ def compareTinyOutput(input_files):
             passedInputFiles.append(fileName)
         else:
             outputStr += ("{0}{1:<30}FAILED{2}\n".format(colors.RED, fileName, colors.ENDC))
-    return passedInputFiles, outputStr
+            diffDict[fileName] = [actualOutput, goldOutput]
+    return passedInputFiles, outputStr, diffDict
 
 
 # Gets all the files that are going to be tested
@@ -111,9 +112,8 @@ def updateStepNum(stepNum):
     Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar", "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
 
 
-def runTests(stepNum, testName):
+def runTests(stepNum, testName, dictOutput):
     updateStepNum(stepNum)
-    # getConfigData()
 
     input_files = getFileNames(testName)
 
@@ -128,7 +128,7 @@ def runTests(stepNum, testName):
     runGoldCompilerAndTiny(input_files)
 
     # compare output
-    passedInputFiles, outputStr = compareTinyOutput(input_files)
+    passedInputFiles, outputStr, diffDict = compareTinyOutput(input_files)
     # inputs to nico / outputs of Manish
     # input_files -- [List of ~~~~~ALL THE FILE NAMES~~~~~~ lol file names or just the one specified]
 
@@ -142,18 +142,33 @@ def runTests(stepNum, testName):
     loggers = []
     lgs = []
 
-    jsonReqDict = JSONPostResults(getpass.getuser(), str(datetime.datetime.now()))
+    jsonReqDict = JSONPostResults(getpass.getuser().replace(' ',''), str(datetime.datetime.now()))
+    diffString = ""
+    infoString = ""
     for f in passedInputFiles:
         logger = TestLogger(file_name=f)
         logger.add_entry_to_log(result_parser.logs[f])
         loggers.append(logger)
         logger.get_full_log()
         jsonReqDict.addTest(f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
+        infoString += " {0}:\n".format(f)
+        infoString += "  CYCLES: {0}, INSTRUCTIONS: {1}, REGISTERS: {2} \n".format(result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
+
+    for f in input_files:
+        if f not in passedInputFiles:
+            diffString += " {0}:\n".format(f)
+            diffString += "  YOUROUTPUT: \n{0}".format(diffDict[f][0])
+            diffString += "  GOLDOUTPUT: \n{0}".format(diffDict[f][1])
+
+    dictOutput["final"] += outputStr
+    dictOutput["diff"] += diffString
+    dictOutput["info"] += infoString
 
     if(len(passedInputFiles) == len(input_files)):
         jsonReqDict.post()
-        
-    return outputStr
+
+
+    return dictOutput
 
 def main():
 
@@ -167,8 +182,13 @@ def main():
     argsDict = vars(args)
     testName = argsDict['test']
     stepStr  = argsDict['step']
-    completeOutput = ""
+    configData = Utility.getConfigData()
+    dictOutput = {}
+    dictOutput["info"] = "INFO: \n"
+    dictOutput["diff"] = "DIFF: \n"
+    dictOutput["final"] = ""
     steps = []
+
 
     if stepStr == "all":
         steps = Utility.STEPS
@@ -179,10 +199,16 @@ def main():
         steps.append(Utility.CURRSTEP)
 
     for step in steps:
-        completeOutput += runTests(step, testName)
+        dictOutput = runTests(step, testName, dictOutput)
+
+    if configData["display"] in ["diff", "all"]:
+        print(dictOutput["diff"])
+
+    if configData["display"] in ["info", "all"]:
+        print(dictOutput["info"])
     
     print("==============================================")
-    print(completeOutput)
+    print(dictOutput["final"])
 
 
 if __name__ == '__main__':
