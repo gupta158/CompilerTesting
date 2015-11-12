@@ -1,6 +1,7 @@
 import os
 import json
 
+
 class colors:
     BLUE = '\033[94m'
     GREEN = '\033[92m'
@@ -10,45 +11,47 @@ class colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 class Utility:
-	APIURL = "https://tinytest.herokuapp.com/api/" 
+    APIURL = "https://tinytest.herokuapp.com/api/"
 
-	SCRIPTPATH = (os.path.dirname(os.path.realpath(__file__)))
-	
-	TESTCASESPATH = SCRIPTPATH + "/testcases/step5/input"
-	GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"
-	ANTLRPATH = SCRIPTPATH + "/goldCompilers/antlr.jar"
-	TINYPATH = SCRIPTPATH + "/tiny"
-	CONFIGFILE = SCRIPTPATH + "/config.json"
-	BASEOUTPUTDIR = SCRIPTPATH + "/output/"
-	BASELOGDIR = SCRIPTPATH + "/logs/"
+    SCRIPTPATH = (os.path.dirname(os.path.realpath(__file__)))
 
-	COMPILEROUTPUT = BASEOUTPUTDIR + "compiledOutput/"
-	TINYOUTPUT = BASEOUTPUTDIR + "tinyOutput/"
+    TESTCASESPATH = SCRIPTPATH + "/testcases/step5/input"
+    GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"
+    ANTLRPATH = SCRIPTPATH + "/goldCompilers/antlr.jar"
+    TINYPATH = SCRIPTPATH + "/tiny"
+    CONFIGFILE = SCRIPTPATH + "/config.json"
+    BASEOUTPUTDIR = SCRIPTPATH + "/output/"
+    BASELOGDIR = SCRIPTPATH + "/logs/"
 
-	GOLDCOMPILEROUTPUT = COMPILEROUTPUT + "gold/"
-	ACTUALCOMPILEROUTPUT = COMPILEROUTPUT + "actual/"
+    COMPILEROUTPUT = BASEOUTPUTDIR + "compiledOutput/"
+    TINYOUTPUT = BASEOUTPUTDIR + "tinyOutput/"
 
-	GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
-	ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
-	STEPS = ["4", "5"]
-	CURRSTEP = "5"
+    GOLDCOMPILEROUTPUT = COMPILEROUTPUT + "gold/"
+    ACTUALCOMPILEROUTPUT = COMPILEROUTPUT + "actual/"
 
-	CONFIGKEYS = ["java", "display"]
-	POSSIBLEDISPLAYOPTIONS = ["diff", "info", "all"]
+    GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
+    ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
+    STEPS = ["4", "5"]
+    CURRSTEP = "5"
 
-	def getConfigData():
-	    config_file_obj = open(Utility.CONFIGFILE)
-	    config_string = config_file_obj.read()
-	    config_dict = json.loads(config_string)
+    CONFIGKEYS = ["java", "display"]
+    POSSIBLEDISPLAYOPTIONS = ["diff", "info", "all"]
 
+    def getConfigData():
+        config_file_obj = open(Utility.CONFIGFILE)
+        config_string = config_file_obj.read()
+        config_dict = json.loads(config_string)
 
-	    for configKey in Utility.CONFIGKEYS:
-	    	if configKey not in config_dict.keys():
-	    		raise Exception(("ERROR! Missing key in config.json file: {0}".format(configKey)))
+        for configKey in Utility.CONFIGKEYS:
+            if configKey not in config_dict.keys():
+                raise Exception(
+                    ("ERROR! Missing key in config.json file: {0}".format(configKey)))
 
-	    config_dict["java"] = int(config_dict["java"])
-	    if config_dict["display"] not in Utility.POSSIBLEDISPLAYOPTIONS:
-	    		raise Exception(("Invalid value for display: {0}. Only the following strings are allowed: {1}".format(config_dict["display"], ", ".join(Utility.POSSIBLEDISPLAYOPTIONS))))
+        config_dict["java"] = int(config_dict["java"])
+        if config_dict["display"] not in Utility.POSSIBLEDISPLAYOPTIONS:
+            raise Exception(("Invalid value for display: {0}. Only the following strings are allowed: {1}".format(
+                config_dict["display"], ", ".join(Utility.POSSIBLEDISPLAYOPTIONS))))
 
-	    return config_dict
+        return config_dict

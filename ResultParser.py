@@ -6,6 +6,7 @@ import time
 
 
 class ResultParser():
+
     def __init__(self):
         self.logs = {}  # dictionary of dictionaries {input file: {'commit id':commit_id,'result',result ...}}
 
@@ -47,10 +48,10 @@ class ResultParser():
 
             tiny_output = self.getTinyOutput(f)
 
-            print(f)
-            print('tiny out')
-            print(tiny_output)
-            print('~~~~~~~~')
+            # print(f)
+            # print('tiny out')
+            # print(tiny_output)
+            # print('~~~~~~~~')
             mem_used, reg_used = get_reg_mem_used(tiny_output)
 
             tmp['result'] = get_result(tiny_output)

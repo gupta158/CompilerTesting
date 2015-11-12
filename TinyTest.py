@@ -13,9 +13,12 @@ from pprint import pprint as pp
 from Utility import *
 import argparse
 
+from prettytable import PrettyTable
+
 
 def setupDirectoryStructure():
-    directoryNames = [Utility.BASELOGDIR, Utility.BASEOUTPUTDIR, Utility.COMPILEROUTPUT, Utility.GOLDCOMPILEROUTPUT, Utility.ACTUALCOMPILEROUTPUT, Utility.TINYOUTPUT, Utility.GOLDTINYOUTPUT, Utility.ACTUALTINYOUTPUT]
+    directoryNames = [Utility.BASELOGDIR, Utility.BASEOUTPUTDIR, Utility.COMPILEROUTPUT, Utility.GOLDCOMPILEROUTPUT,
+                      Utility.ACTUALCOMPILEROUTPUT, Utility.TINYOUTPUT, Utility.GOLDTINYOUTPUT, Utility.ACTUALTINYOUTPUT]
     for directoryName in directoryNames:
         if not os.path.isdir(directoryName):
             os.mkdir(directoryName)
@@ -24,18 +27,22 @@ def setupDirectoryStructure():
 def runCompiler(input_file, gold=False):
     configData = Utility.getConfigData()
     if gold:
-        args = ['java', '-cp', Utility.ANTLRPATH + ':' + Utility.GOLDCOMPILERPATH, 'Micro', os.path.join(Utility.TESTCASESPATH, input_file)]
+        args = ['java', '-cp', Utility.ANTLRPATH + ':' + Utility.GOLDCOMPILERPATH,
+                'Micro', os.path.join(Utility.TESTCASESPATH, input_file)]
         compiler_output = Utility.GOLDCOMPILEROUTPUT
     else:
         if configData["java"]:
-            args = ['java', '-cp', 'lib/antlr.jar:classes/' , 'Micro', os.path.join(Utility.TESTCASESPATH, input_file)]
+            args = ['java', '-cp', 'lib/antlr.jar:classes/', 'Micro',
+                    os.path.join(Utility.TESTCASESPATH, input_file)]
             compiler_output = Utility.GOLDCOMPILEROUTPUT
 
         else:
-            args = ['Micro',  os.path.join(Utility.TESTCASESPATH, input_file)]
+            args = ['./Micro',
+                    os.path.join(Utility.TESTCASESPATH, input_file)]
             compiler_output = Utility.ACTUALCOMPILEROUTPUT
 
-    compiled_output = os.path.join(compiler_output, input_file.replace(".micro", ".tiny"))
+    compiled_output = os.path.join(
+        compiler_output, input_file.replace(".micro", ".tiny"))
     fp = open(compiled_output, 'w')
     runProc = subprocess.Popen(args, stdout=fp)
     error = runProc.communicate()
@@ -43,20 +50,26 @@ def runCompiler(input_file, gold=False):
 
 def runTiny(input_file, gold=False):
     if gold:
-        compiler_output = os.path.join(Utility.GOLDCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
-        tiny_output = open(os.path.join(Utility.GOLDTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
+        compiler_output = os.path.join(
+            Utility.GOLDCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
+        tiny_output = open(os.path.join(
+            Utility.GOLDTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
     else:
-        compiler_output = os.path.join(Utility.ACTUALCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
-        tiny_output = open(os.path.join(Utility.ACTUALTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
+        compiler_output = os.path.join(
+            Utility.ACTUALCOMPILEROUTPUT, input_file.replace(".micro", ".tiny"))
+        tiny_output = open(os.path.join(
+            Utility.ACTUALTINYOUTPUT, input_file.replace(".micro", ".out")), 'w')
 
     args = [Utility.TINYPATH, compiler_output]
 
     if os.path.exists(os.path.join(Utility.TESTCASESPATH, input_file.replace(".micro", ".input"))):
-        input_file = open(os.path.join(Utility.TESTCASESPATH, input_file.replace(".micro", ".input")), 'r')
+        input_file = open(os.path.join(Utility.TESTCASESPATH,
+                                       input_file.replace(".micro", ".input")), 'r')
     else:
         input_file = None
 
-    runProc = subprocess.Popen(args, stdout=tiny_output, stdin=input_file, shell=False)
+    runProc = subprocess.Popen(
+        args, stdout=tiny_output, stdin=input_file, shell=False)
     error = runProc.communicate()
 
 
@@ -85,12 +98,15 @@ def compareTinyOutput(input_files):
     diffDict = {}
     for fileName in input_files:
         actualOutput = getTinyOutput(fileName).split("STATISTIC")[0]
-        goldOutput = getTinyOutput(fileName, path=Utility.GOLDTINYOUTPUT).split("STATISTIC")[0]
+        goldOutput = getTinyOutput(
+            fileName, path=Utility.GOLDTINYOUTPUT).split("STATISTIC")[0]
         if actualOutput == goldOutput:
-            outputStr += ("{0}{1:<30}PASSED{2}\n".format(colors.GREEN, fileName, colors.ENDC))
+            outputStr += ("{0}{1:<30}PASSED{2}\n".format(colors.GREEN,
+                                                         fileName, colors.ENDC))
             passedInputFiles.append(fileName)
         else:
-            outputStr += ("{0}{1:<30}FAILED{2}\n".format(colors.RED, fileName, colors.ENDC))
+            outputStr += ("{0}{1:<30}FAILED{2}\n".format(colors.RED,
+                                                         fileName, colors.ENDC))
             diffDict[fileName] = [actualOutput, goldOutput]
     return passedInputFiles, outputStr, diffDict
 
@@ -100,16 +116,21 @@ def getFileNames(testName):
     input_files = []
     inputArg = testName
     if inputArg is None:
-        input_files = [f for f in os.listdir(Utility.TESTCASESPATH) if os.path.isfile(os.path.join(Utility.TESTCASESPATH, f)) and ".micro" in f]
+        input_files = [f for f in os.listdir(Utility.TESTCASESPATH) if os.path.isfile(
+            os.path.join(Utility.TESTCASESPATH, f)) and ".micro" in f]
     else:
         input_files.append(inputArg)
 
     return input_files
 
-#Update step number for all constant params
+# Update step number for all constant params
+
+
 def updateStepNum(stepNum):
-    Utility.TESTCASESPATH = re.sub(r'/testcases/step\d/input', "/testcases/step{0}/input".format(str(stepNum)), Utility.TESTCASESPATH)
-    Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar", "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
+    Utility.TESTCASESPATH = re.sub(
+        r'/testcases/step\d/input', "/testcases/step{0}/input".format(str(stepNum)), Utility.TESTCASESPATH)
+    Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar",
+                                      "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
 
 
 def runTests(stepNum, testName, dictOutput):
@@ -130,7 +151,8 @@ def runTests(stepNum, testName, dictOutput):
     # compare output
     passedInputFiles, outputStr, diffDict = compareTinyOutput(input_files)
     # inputs to nico / outputs of Manish
-    # input_files -- [List of ~~~~~ALL THE FILE NAMES~~~~~~ lol file names or just the one specified]
+    # input_files -- [List of ~~~~~ALL THE FILE NAMES~~~~~~ lol file names or
+    # just the one specified]
 
     # parsing
     # output dictionary {input_file_name : TestLogEntry()}
@@ -142,17 +164,26 @@ def runTests(stepNum, testName, dictOutput):
     loggers = []
     lgs = []
 
-    jsonReqDict = JSONPostResults(getpass.getuser().replace(' ',''), str(datetime.datetime.now()))
+    jsonReqDict = JSONPostResults(getpass.getuser().replace(
+        ' ', ''), str(datetime.datetime.now()))
     diffString = ""
     infoString = ""
+
     for f in passedInputFiles:
         logger = TestLogger(file_name=f)
         logger.add_entry_to_log(result_parser.logs[f])
         loggers.append(logger)
         logger.get_full_log()
-        jsonReqDict.addTest(f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
-        infoString += " {0}:\n".format(f)
-        infoString += "  CYCLES: {0}, INSTRUCTIONS: {1}, REGISTERS: {2} \n".format(result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'], result_parser.logs[f]['registers_used'])
+        jsonReqDict.addTest(f, result_parser.logs[f]['cycles'], result_parser.logs[f][
+                            'instructions'], result_parser.logs[f]['registers_used'])
+
+        dictOutput["info"].add_row([f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'],
+                                    result_parser.logs[f]['registers_used']])
+
+        # infoString += " {0}:\n".format(f)
+        # infoString += "  CYCLES: {0:>6}, INSTRUCTIONS: {1:>6}, REGISTERS: {2:>6} \n".format(result_parser.logs[
+        # f]['cycles'], result_parser.logs[f]['instructions'],
+        # result_parser.logs[f]['registers_used'])
 
     for f in input_files:
         if f not in passedInputFiles:
@@ -162,38 +193,42 @@ def runTests(stepNum, testName, dictOutput):
 
     dictOutput["final"] += outputStr
     dictOutput["diff"] += diffString
-    dictOutput["info"] += infoString
 
     if(len(passedInputFiles) == len(input_files)):
         jsonReqDict.post()
 
-
     return dictOutput
+
 
 def main():
 
     parser = argparse.ArgumentParser(description='Run tests for compiler')
     parser.add_argument('--test', metavar='testName', type=str, nargs='?',
-                       help='The test name to run (eg. test_expr.micro)')
+                        help='The test name to run (eg. test_expr.micro)')
     parser.add_argument('--step',  metavar='stepNum', type=str, nargs='?',
-                       help='The step to run (default is the step due)')
+                        help='The step to run (default is the step due)')
 
     args = parser.parse_args()
     argsDict = vars(args)
     testName = argsDict['test']
-    stepStr  = argsDict['step']
+    stepStr = argsDict['step']
     configData = Utility.getConfigData()
     dictOutput = {}
-    dictOutput["info"] = "INFO: \n"
+    dictOutput["info"] = PrettyTable(
+        ['Test File', 'Cycles', 'Instructions', 'Registers'])
+    dictOutput["info"].align['Test File'] = "l"
+    dictOutput["info"].align['Cycles'] = "r"
+    dictOutput["info"].align['Instructions'] = "r"
+    dictOutput["info"].align['Registers'] = "r"
+
     dictOutput["diff"] = "DIFF: \n"
     dictOutput["final"] = ""
     steps = []
 
-
     if stepStr == "all":
         steps = Utility.STEPS
         testName = None
-    elif stepStr in  Utility.STEPS:
+    elif stepStr in Utility.STEPS:
         steps.append(stepStr)
     else:
         steps.append(Utility.CURRSTEP)
@@ -202,11 +237,12 @@ def main():
         dictOutput = runTests(step, testName, dictOutput)
 
     if configData["display"] in ["diff", "all"]:
-        print(dictOutput["diff"])
+        if dictOutput["diff"] != "DIFF: \n":
+            print(dictOutput["diff"])
 
     if configData["display"] in ["info", "all"]:
         print(dictOutput["info"])
-    
+
     print("==============================================")
     print(dictOutput["final"])
 
