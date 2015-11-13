@@ -6,7 +6,7 @@ import time
 import json
 import urllib.request
 
-from Utility import *
+from src.Utility import *
 
 class JSONPostResults():
     def __init__(self, userName, currentDate):

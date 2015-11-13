@@ -6,11 +6,11 @@ import datetime
 import json
 import re
 
-from ResultParser import ResultParser
-from TestLogger import TestLogger
-from JSONPostResults import JSONPostResults
+from src.ResultParser import ResultParser
+from src.TestLogger import TestLogger
+from src.JSONPostResults import JSONPostResults
 from pprint import pprint as pp
-from Utility import *
+from src.Utility import *
 import argparse
 
 from prettytable import PrettyTable

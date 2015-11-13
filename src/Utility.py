@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 
 
 class colors:
@@ -15,7 +16,7 @@ class colors:
 class Utility:
     APIURL = "https://tinytest.herokuapp.com/api/"
 
-    SCRIPTPATH = (os.path.dirname(os.path.realpath(__file__)))
+    SCRIPTPATH = str(Path(__file__).parents[1])
 
     TESTCASESPATH = SCRIPTPATH + "/testcases/step5/input"
     GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"

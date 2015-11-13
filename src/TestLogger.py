@@ -2,7 +2,7 @@ import csv
 import getpass
 import os.path
 from pprint import pprint as pp
-from Utility import Utility
+from src.Utility import Utility
 
 
 class TestLogger():
