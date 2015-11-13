@@ -19,19 +19,19 @@ This repo contains the client side code of Compiler Tester. Steps to use this:
     
     a. This runs all the test cases for the currentstep
 
-            python3 CompilerTesting/TestCompiler.py
+            python3 CompilerTesting/TinyTest.py
           
     b.  This runs all the test cases for all steps after and including step4
     
-           python3 CompilerTesting/TestCompiler.py --step all
+           python3 CompilerTesting/TinyTest.py --step all
            
     c.  This runs all the test cases for a certain step, either 4 or 5
   
-           python3 CompilerTesting/TestCompiler.py --step 4  
+           python3 CompilerTesting/TinyTest.py --step 4  
            
     d.  This runs a certain testcase of the current step, to run a test of a different step add the --step
     
-            python3 CompilerTesting/TestCompiler.py --test test_expr.micro
+            python3 CompilerTesting/TinyTest.py --test test_expr.micro
     
           
 
