@@ -34,8 +34,8 @@ class Utility:
 
     GOLDTINYOUTPUT = TINYOUTPUT + "gold/"
     ACTUALTINYOUTPUT = TINYOUTPUT + "actual/"
-    STEPS = ["4", "5"]
-    CURRSTEP = "5"
+    STEPS = ["4", "5", "6"]
+    CURRSTEP = "6"
 
     CONFIGKEYS = ["java", "display"]
     POSSIBLEDISPLAYOPTIONS = ["diff", "info", "all"]
