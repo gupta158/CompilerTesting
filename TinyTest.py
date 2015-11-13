@@ -15,6 +15,9 @@ import argparse
 
 from prettytable import PrettyTable
 
+def compileTiny():
+    runProc = subprocess.Popen(["g++", Utility.TINYSOURCEPATH, "-o",  Utility.TINYPATH])
+    return
 
 def setupDirectoryStructure():
     directoryNames = [Utility.BASELOGDIR, Utility.BASEOUTPUTDIR, Utility.COMPILEROUTPUT, Utility.GOLDCOMPILEROUTPUT,
@@ -224,6 +227,8 @@ def main():
     dictOutput["diff"] = "DIFF: \n"
     dictOutput["final"] = ""
     steps = []
+
+    compileTiny()
 
     if stepStr == "all":
         steps = Utility.STEPS

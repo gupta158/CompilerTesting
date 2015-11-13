@@ -8,11 +8,12 @@ This repo contains the client side code of Compiler Tester. Steps to use this:
 
     ```
     { 
-    "name": "Name",
-    "java": "0"
+    "java": "0", 
+    "display": "all"
     }
     ```
-    Put in your name and indicate if you are using Java by entering a "1" in that field. If you are using C++ or any other language, set it to "0".
+    Indicate if you are using Java by entering a "1" in that field. If you are using C++ or any other language, set it to "0".
+    Display has 3 options: 'all', 'info', 'diff'. Info prints out the cycles, instructions and registers used, diff prints out the diff if it fails and all prints both of these things. 
 
   3. To run the script, go back to the main project directory (i.e. your compiler directory) the following commands are your options:
     

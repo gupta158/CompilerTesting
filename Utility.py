@@ -21,6 +21,7 @@ class Utility:
     GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"
     ANTLRPATH = SCRIPTPATH + "/goldCompilers/antlr.jar"
     TINYPATH = SCRIPTPATH + "/tiny"
+    TINYSOURCEPATH = SCRIPTPATH + "/tinyNew.C"
     CONFIGFILE = SCRIPTPATH + "/config.json"
     BASEOUTPUTDIR = SCRIPTPATH + "/output/"
     BASELOGDIR = SCRIPTPATH + "/logs/"
