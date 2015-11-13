@@ -16,7 +16,8 @@ import argparse
 from prettytable import PrettyTable
 
 def compileTiny():
-    runProc = subprocess.Popen(["g++", Utility.TINYSOURCEPATH, "-o",  Utility.TINYPATH])
+    runProc = subprocess.Popen(["g++", "-w", Utility.TINYSOURCEPATH, "-o",  Utility.TINYPATH])
+    runProc.communicate()
     return
 
 def setupDirectoryStructure():
