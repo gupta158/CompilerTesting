@@ -18,8 +18,8 @@ class Utility:
 
     SCRIPTPATH = str(Path(__file__).parents[1])
 
-    TESTCASESPATH = SCRIPTPATH + "/testcases/step5/input"
-    GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step5/step5.jar"
+    TESTCASESPATH = SCRIPTPATH + "/testcases/step6/input"
+    GOLDCOMPILERPATH = SCRIPTPATH + "/goldCompilers/step6/step6.jar"
     ANTLRPATH = SCRIPTPATH + "/goldCompilers/antlr.jar"
     TINYPATH = SCRIPTPATH + "/tiny"
     TINYSOURCEPATH = SCRIPTPATH + "/tinyNew.C"
