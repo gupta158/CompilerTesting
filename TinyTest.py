@@ -15,10 +15,20 @@ import argparse
 
 from prettytable import PrettyTable
 
+compiled_code = {}
+
+
+def log(s, level):
+    if True:  # change to be adapted from config
+        print(" " * (level * 2) + str(s))
+
+
 def compileTiny():
-    runProc = subprocess.Popen(["g++", "-w", Utility.TINYSOURCEPATH, "-o",  Utility.TINYPATH])
+    runProc = subprocess.Popen(
+        ["g++", "-w", Utility.TINYSOURCEPATH, "-o",  Utility.TINYPATH])
     runProc.communicate()
     return
+
 
 def setupDirectoryStructure():
     directoryNames = [Utility.BASELOGDIR, Utility.BASEOUTPUTDIR, Utility.COMPILEROUTPUT, Utility.GOLDCOMPILEROUTPUT,
@@ -38,7 +48,9 @@ def runCompiler(input_file, gold=False):
         if configData["java"]:
             args = ['java', '-cp', 'lib/antlr.jar:classes/', 'Micro',
                     os.path.join(Utility.TESTCASESPATH, input_file)]
-            compiler_output = Utility.GOLDCOMPILEROUTPUT
+            # pretty sure this is an error but putting a comment to remind
+            # manish
+            compiler_output = Utility.GOLDCOMPILEROUTPUT  # <-- Actual
 
         else:
             args = ['./Micro',
@@ -88,8 +100,13 @@ def runGoldCompilerAndTiny(input_files):
 # Run gold compiler and tiny
 def runActualCompilerAndTiny(input_files):
     for fileName in input_files:
+        log("File: {}".format(fileName), 3)
+        log("Compiling {}".format(fileName), 4)
         runCompiler(fileName)
+        log("Finished Compiling {}, now executing..".format(fileName), 4)
         runTiny(fileName)
+        log("Finished Executing {}".format(fileName), 4)
+        log("", 4)
 
 
 def getTinyOutput(input_file, path=Utility.ACTUALTINYOUTPUT):
@@ -147,12 +164,14 @@ def runTests(stepNum, testName, dictOutput):
 
     # scripting
     # run .micro and tiny on your file
+    log("Testing compiler", 2)
     runActualCompilerAndTiny(input_files)
 
     # run gold compiler
     runGoldCompilerAndTiny(input_files)
 
     # compare output
+    log("Comparing outputs", 2)
     passedInputFiles, outputStr, diffDict = compareTinyOutput(input_files)
     # inputs to nico / outputs of Manish
     # input_files -- [List of ~~~~~ALL THE FILE NAMES~~~~~~ lol file names or
@@ -163,7 +182,6 @@ def runTests(stepNum, testName, dictOutput):
     result_parser = ResultParser()
     result_parser.parse_results(passedInputFiles)
 
-    # pp(result_parser.logs)
     # logging
     loggers = []
     lgs = []
@@ -172,6 +190,8 @@ def runTests(stepNum, testName, dictOutput):
         ' ', ''), str(datetime.datetime.now()))
     diffString = ""
     infoString = ""
+
+    log("Collecting data", 2)
 
     for f in passedInputFiles:
         logger = TestLogger(file_name=f)
@@ -184,22 +204,39 @@ def runTests(stepNum, testName, dictOutput):
         dictOutput["info"].add_row([f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'],
                                     result_parser.logs[f]['registers_used']])
 
-        # infoString += " {0}:\n".format(f)
-        # infoString += "  CYCLES: {0:>6}, INSTRUCTIONS: {1:>6}, REGISTERS: {2:>6} \n".format(result_parser.logs[
-        # f]['cycles'], result_parser.logs[f]['instructions'],
-        # result_parser.logs[f]['registers_used'])
-
     for f in input_files:
         if f not in passedInputFiles:
             diffString += " {0}:\n".format(f)
-            diffString += "  YOUROUTPUT: \n{0}".format(diffDict[f][0])
-            diffString += "  GOLDOUTPUT: \n{0}".format(diffDict[f][1])
+            diffString += "  YOUROUTPUT: \n    {0}".format(diffDict[f][0])
+            # would be cool if these were interweaved so that it was error,
+            # offending statement, error, offending statement etc.
+            error_check = re.findall(r'error on line (\d+)', diffDict[f][0])
+            if error_check:
+                for line_num in error_check:
+                    line_num = int(line_num)
+                    compiler_output = Utility.ACTUALCOMPILEROUTPUT
+                    compiled_output = os.path.join(
+                        compiler_output, f.replace(".micro", ".tiny"))
+                    with open(compiled_output, 'r') as fp:
+                        tiny_code = fp.readlines()
+                        error_line = tiny_code[line_num]
+                        diffString += "      {}\n".format(error_line)
+
+            diffString += "  GOLDOUTPUT: \n    {0}".format(diffDict[f][1])
 
     dictOutput["final"] += outputStr
     dictOutput["diff"] += diffString
 
+    log("", 2)
+
     if(len(passedInputFiles) == len(input_files)):
+        log("Posting to tinytest", 2)
         jsonReqDict.post()
+        log("Post completed!", 2)
+    else:
+        log("Did not pass testcases! Not posting to tinytest", 2)
+
+    log("\n\n", 2)
 
     return dictOutput
 
@@ -240,6 +277,8 @@ def main():
         steps.append(Utility.CURRSTEP)
 
     for step in steps:
+        log("", 1)
+        log("Running Tests for Step {}".format(step), 1)
         dictOutput = runTests(step, testName, dictOutput)
 
     if configData["display"] in ["diff", "all"]:
@@ -247,9 +286,11 @@ def main():
             print(dictOutput["diff"])
 
     if configData["display"] in ["info", "all"]:
+        log("STATISTICS:", 0)
         print(dictOutput["info"])
+        log("\n\n", 1)
 
-    print("==============================================")
+    print("==============RESULTS===============")
     print(dictOutput["final"])
 
 
