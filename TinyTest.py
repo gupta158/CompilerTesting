@@ -19,7 +19,8 @@ compiled_code = {}
 
 
 def log(s, level):
-    if True:  # change to be adapted from config
+    configData = Utility.getConfigData()
+    if configData["verbose"]:  # change to be adapted from config
         print(" " * (level * 2) + str(s))
 
 
