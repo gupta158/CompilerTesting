@@ -38,7 +38,7 @@ class Utility:
     STEPS = ["4", "5", "6"]
     CURRSTEP = "6"
 
-    CONFIGKEYS = ["java", "display"]
+    CONFIGKEYS = ["java", "display", "verbose"]
     POSSIBLEDISPLAYOPTIONS = ["diff", "info", "all"]
 
     def getConfigData():
@@ -52,6 +52,7 @@ class Utility:
                     ("ERROR! Missing key in config.json file: {0}".format(configKey)))
 
         config_dict["java"] = int(config_dict["java"])
+        config_dict["verbose"] = int(config_dict["verbose"])
         if config_dict["display"] not in Utility.POSSIBLEDISPLAYOPTIONS:
             raise Exception(("Invalid value for display: {0}. Only the following strings are allowed: {1}".format(
                 config_dict["display"], ", ".join(Utility.POSSIBLEDISPLAYOPTIONS))))
