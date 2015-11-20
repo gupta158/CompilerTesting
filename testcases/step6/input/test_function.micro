@@ -1,0 +1,31 @@
+PROGRAM functions
+BEGIN
+
+	STRING space := " ";
+	STRING eol := "\n";
+
+
+	FUNCTION INT F (INT n)
+	BEGIN
+		INT ret1;
+		IF (n < 10)
+			ret1 := F(n+1) + 1 + 2 + 4 + 5 + 6 + 8 + 9;
+		FI
+		RETURN ret1;
+	END
+	
+	
+	FUNCTION INT main ()
+	BEGIN
+		INT i, result;
+
+ 		FOR (i := 0; i < 100; i := i + 1)
+			result := F(i);
+			WRITE (i,space);
+			WRITE (result,eol);
+		ROF
+
+		RETURN 0;
+	END
+
+END	
