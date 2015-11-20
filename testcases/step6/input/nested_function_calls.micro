@@ -1,0 +1,40 @@
+PROGRAM functions
+BEGIN
+
+	FUNCTION INT factorial(INT a)
+	BEGIN
+		INT ret;
+		INT tret;
+		IF (a = 1)
+			RETURN 1;
+		ELSE
+			tret := factorial(a-1);
+			ret := tret*a;
+		FI
+		RETURN ret;
+	END
+
+	FUNCTION INT add (INT a, INT b)
+	BEGIN
+	    RETURN a + b;
+	END
+
+	FUNCTION INT mul (INT a, INT b)
+	BEGIN
+	    RETURN a * b;
+	END
+
+	FUNCTION INT main ()
+	BEGIN
+		INT num;
+		INT result;
+
+		num := 10;
+
+        result := mul(4,add(4, mul(5,7)));
+
+		WRITE(result);
+
+		RETURN 0;
+	END
+END
