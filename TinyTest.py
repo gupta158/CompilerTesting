@@ -203,7 +203,7 @@ def runTests(stepNum, testName, dictOutput):
                             'instructions'], result_parser.logs[f]['registers_used'])
 
         dictOutput["info"].add_row([f, result_parser.logs[f]['cycles'], result_parser.logs[f]['instructions'],
-                                    result_parser.logs[f]['registers_used']])
+                                    result_parser.logs[f]['registers_used'], result_parser.logs[f]['memory_used']])
 
     for f in input_files:
         if f not in passedInputFiles:
@@ -257,11 +257,12 @@ def main():
     configData = Utility.getConfigData()
     dictOutput = {}
     dictOutput["info"] = PrettyTable(
-        ['Test File', 'Cycles', 'Instructions', 'Registers'])
+        ['Test File', 'Cycles', 'Instructions', 'Registers', 'Memory'])
     dictOutput["info"].align['Test File'] = "l"
     dictOutput["info"].align['Cycles'] = "r"
     dictOutput["info"].align['Instructions'] = "r"
     dictOutput["info"].align['Registers'] = "r"
+    dictOutput["info"].align['Memory'] = "r"
 
     dictOutput["diff"] = "DIFF: \n"
     dictOutput["final"] = ""
