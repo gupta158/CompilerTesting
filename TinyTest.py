@@ -151,8 +151,8 @@ def getFileNames(testName):
 def updateStepNum(stepNum):
     Utility.TESTCASESPATH = re.sub(
         r'/testcases/step\d/input', "/testcases/step{0}/input".format(str(stepNum)), Utility.TESTCASESPATH)
-    Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar",
-                                      "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
+    # Utility.GOLDCOMPILERPATH = re.sub("/goldCompilers/step\d/step\d.jar",
+    #                                   "/goldCompilers/step{0}/step{0}.jar".format(str(stepNum)), Utility.GOLDCOMPILERPATH)
 
 
 def runTests(stepNum, testName, dictOutput):

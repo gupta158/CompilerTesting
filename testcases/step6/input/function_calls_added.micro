@@ -8,6 +8,7 @@ BEGIN
 	FUNCTION INT FOO (INT n)
 	BEGIN
 		INT ret1;
+		ret1 := 0;
 		IF (n > 4)
 			ret1 := FOO(n-1) + 1 + 2 + 4 + 5 + 6 + 8 + 9;
 		FI
@@ -19,10 +20,21 @@ BEGIN
 	BEGIN
 		INT i, result;
 
-		result := FOO(1) + FOO(2) + FOO(3) + FOO(4) + FOO(5);
-		i := FOO(1) + FOO(2) + 4 + FOO(3) * FOO(FOO(3));
+		result := FOO(1);
 		WRITE(result, eol, space, space, space, space);
-		WRITE(i);
+		result := FOO(2);
+		WRITE(result, eol, space, space, space, space);
+		result := FOO(3);
+		WRITE(result, eol, space, space, space, space);
+		result := FOO(4);
+		WRITE(result, eol, space, space, space, space);
+		result := FOO(5);
+		WRITE(result, eol, space, space, space, space);
+
+		result := FOO(1) + FOO(2) + FOO(3) + FOO(4) + FOO(5);
+		--i := FOO(1) + FOO(2) + 4 + FOO(3) * FOO(FOO(3));
+		WRITE(result, eol, space, space, space, space);
+		--WRITE(i);
 
 		RETURN 0;
 	END

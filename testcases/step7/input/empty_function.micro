@@ -1,0 +1,26 @@
+PROGRAM functions
+BEGIN
+
+	STRING space := " ";
+	STRING eol := "\n";
+
+
+	FUNCTION INT FOO (INT n)
+	BEGIN
+		INT ret1;
+		ret1 := 0;
+		IF (n > 4)
+			ret1 := FOO(n-1) + 1 + 2 + 4 + 5 + 6 + 8 + 9;
+		FI
+		RETURN ret1;
+	END
+	
+	
+	FUNCTION INT main ()
+	BEGIN
+		INT i, result;
+
+		RETURN 0;
+	END
+
+END	
