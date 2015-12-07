@@ -1,0 +1,23 @@
+PROGRAM test
+BEGIN
+	INT a,b,c,x,y,z,h,j,k;
+	FUNCTION INT printout (INT a,INT b,INT c)
+	BEGIN
+		a := a * a;
+		c := c / a;
+		b := b / c;
+		WRITE(a);
+		WRITE(b);
+		WRITE(c);
+
+		RETURN b;
+	END
+
+  FUNCTION INT main()
+	BEGIN
+	INT a;
+	a := printout(2, 16 * 16, 4 * 4);
+	WRITE(a);
+	RETURN 1;
+	END
+END
