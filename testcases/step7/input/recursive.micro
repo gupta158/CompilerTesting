@@ -1,0 +1,57 @@
+PROGRAM function
+BEGIN
+	FUNCTION INT iseven(INT a)
+	BEGIN
+		INT ret, b;
+		IF ( a = 0)
+			ret := 1;
+		ELSE
+			b := a - 1;
+			ret := isodd(b);
+		FI
+		RETURN ret;
+	END
+
+	FUNCTION INT isodd(INT a)
+	BEGIN
+		INT ret, b;
+		IF ( a = 0)
+			ret := 0;
+		ELSE
+			b := a - 1;
+			ret := iseven(b);
+		FI
+		RETURN ret;
+	END
+
+	FUNCTION INT main ()
+	BEGIN
+		INT a, result, res;
+
+		a := 5;
+
+		result := iseven(a);
+		res := isodd(a);
+
+		WRITE(result,res);
+
+		a := 20;
+
+		result := iseven(a);
+		res := isodd(a);
+
+		WRITE(result,res);
+		a := 100;
+
+		result := iseven(a);
+		res := isodd(a);
+
+		WRITE(result,res);
+		a := 201;
+
+		result := iseven(a);
+		res := isodd(a);
+
+		WRITE(result,res);
+	END
+END 

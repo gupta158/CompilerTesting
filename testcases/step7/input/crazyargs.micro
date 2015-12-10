@@ -1,0 +1,25 @@
+PROGRAM functReturn
+BEGIN
+	STRING eol := "\n";
+
+	FUNCTION INT sum(INT a, INT b)
+	BEGIN
+		INT ret;
+		ret := a + b;
+		RETURN ret;
+	END
+
+	FUNCTION INT main ()
+	BEGIN
+		INT a, b, c, d, result;
+
+		a := 1;
+		b := 2;
+		c := 3;
+		d := 4;
+
+		result := sum(a+b*c+d,sum(5+5*c,sum(d*c,a+b)));
+
+		WRITE(result, eol);
+	END
+END

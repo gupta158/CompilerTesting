@@ -1,0 +1,74 @@
+PROGRAM lotsoargs
+BEGIN
+	STRING eol := "\n";
+
+	FUNCTION INT printer(INT a, INT b, INT c, INT d, INT e, INT f, INT g, INT h, INT i, INT j, INT k, INT l, INT m, INT n, INT o, INT p, INT q, INT r, INT s, INT t, INT u, INT v, INT w, INT x, INT y, INT z, INT aa, INT bb, INT cc, INT dd, INT ee, INT ff, INT gg, INT hh, INT ii, INT jj, INT kk, INT ll, INT mm, INT nn, INT oo, INT pp, INT qq, INT rr, INT ss, INT tt, INT uu, INT vv, INT ww, INT xx, INT yy, INT zz)
+	BEGIN
+		INT ret;
+		ret := 1;
+		WRITE(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, bb, cc, dd, ee, ff, gg, hh, ii, jj, kk, ll, mm, nn, oo, pp, qq, rr, ss, tt, uu, vv, ww, xx, yy, zz);
+		RETURN ret;
+	END
+
+	FUNCTION INT main ()
+	BEGIN
+		INT a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, bb, cc, dd, ee, ff, gg, hh, ii, jj, kk, ll, mm, nn, oo, pp, qq, rr, ss, tt, uu, vv, ww, xx, yy, zz, result;
+	
+		a := 1; 
+		b := 2; 
+		c := 3; 
+		d := 4; 
+		e := 5; 
+		f := 6; 
+		g := 7; 
+		h := 8; 
+		i := 9; 
+		j := 10; 
+		k := 11; 
+		l := 12; 
+		m := 13; 
+		n := 14; 
+		o := 15; 
+		p := 16; 
+		q := 17; 
+		r := 18; 
+		s := 19; 
+		t := 20; 
+		u := 21; 
+		v := 22; 
+		w := 23; 
+		x := 24; 
+		y := 25; 
+		z := 26; 
+		aa := 27; 
+		bb := 28; 
+		cc := 29; 
+		dd := 30; 
+		ee := 31; 
+		ff := 32; 
+		gg := 33; 
+		hh := 34; 
+		ii := 35; 
+		jj := 36; 
+		kk := 37; 
+		ll := 38; 
+		mm := 39; 
+		nn := 40; 
+		oo := 41; 
+		pp := 42; 
+		qq := 43; 
+		rr := 44; 
+		ss := 45; 
+		tt := 46; 
+		uu := 47; 
+		vv := 48; 
+		ww := 49; 
+		xx := 50; 
+		yy := 51; 
+		zz := 52;
+
+		result := printer(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, bb, cc, dd, ee, ff, gg, hh, ii, jj, kk, ll, mm, nn, oo, pp, qq, rr, ss, tt, uu, vv, ww, xx, yy, zz);
+
+		WRITE(result, eol);
+	END
+END
