@@ -21,5 +21,7 @@ BEGIN
 		result := sum(sum(a,b), sum(c,d));
 
 		WRITE(result, eol);
+
+		RETURN 1;
 	END
 END

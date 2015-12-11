@@ -21,5 +21,6 @@ BEGIN
 		result := sum(a+b*c+d,sum(5+5*c,sum(d*c,a+b)));
 
 		WRITE(result, eol);
+		RETURN 1;
 	END
 END
