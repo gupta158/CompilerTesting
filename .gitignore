@@ -3,3 +3,4 @@ output/
 tiny
 logs/*
 temp_*
+.DS_STORE
