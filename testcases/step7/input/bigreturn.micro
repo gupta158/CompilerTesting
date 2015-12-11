@@ -1,0 +1,28 @@
+PROGRAM bigReturn
+BEGIN
+    STRING eol := "\n";
+
+    FUNCTION FLOAT wow(FLOAT a, FLOAT b)
+    BEGIN
+        RETURN b - a * b - a + b - a;
+    END
+
+    FUNCTION FLOAT sum(FLOAT a, FLOAT b)
+    BEGIN
+        RETURN wow(a,b) + wow(wow(a,a), wow(b,b)) + 1 + 2 + a + 3 + 4 + b;
+    END
+
+    FUNCTION INT main ()
+    BEGIN
+        FLOAT a, b, c, d, result;
+
+        a := 1;
+        b := 2;
+        c := 3;
+        d := 4;
+
+        result := sum(sum(a,b), sum(c,d));
+
+        WRITE(result, eol);
+    END
+END
