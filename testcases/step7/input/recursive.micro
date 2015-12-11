@@ -53,5 +53,7 @@ BEGIN
 		res := isodd(a);
 
 		WRITE(result,res);
+
+		RETURN 1;
 	END
 END 
