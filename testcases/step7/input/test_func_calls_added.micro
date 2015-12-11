@@ -1,0 +1,27 @@
+PROGRAM funcCallsAdded
+BEGIN
+	STRING eol := "\n";
+
+	FUNCTION INT sum(INT a, INT b)
+	BEGIN
+		INT ret;
+		ret := a + b;
+		RETURN ret;
+	END
+
+	FUNCTION INT main ()
+	BEGIN
+		INT a, b, c, d, result;
+
+		a := 1;
+		b := 2;
+		c := 3;
+		d := 4;
+
+		result := sum(a,b) + sum(b,c) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d) + sum(b,c) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d) + sum(a,b) + sum(b,c) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d) + sum(b,c) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d) / sum(c,d) + sum(a,c) + sum(a,d) * sum(b,d);
+
+		WRITE(result, eol);
+
+		RETURN 0;
+	END
+END
