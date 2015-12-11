@@ -6,6 +6,7 @@ BEGIN
 	BEGIN
 		INT ret;
 		ret := a + b;
+		WRITE(a,b,eol);
 		RETURN ret;
 	END
 
